@@ -1,0 +1,669 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="format-detection" content="telephone=no"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black"><link rel="icon" href="/images/icons/favicon-16x16.png?v=2.6.2" type="image/png" sizes="16x16"><link rel="icon" href="/images/icons/favicon-32x32.png?v=2.6.2" type="image/png" sizes="32x32"><meta name="description" content="主要讲解376.2集中器本地通信模块接口协议，以及后续的继续学习总结。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="低压电力线宽带载波通信互联互通技术规范第4-2部分：数据链路层通信协议">
+<meta property="og:url" content="http://example.com/2021/07/28/376.2%E9%9B%86%E4%B8%AD%E5%99%A8%E6%9C%AC%E5%9C%B0%E9%80%9A%E4%BF%A1%E6%A8%A1%E5%9D%97%E6%8E%A5%E5%8F%A3%E5%8D%8F%E8%AE%AE/index.html">
+<meta property="og:site_name" content="naumy&#39;s Blog">
+<meta property="og:description" content="主要讲解376.2集中器本地通信模块接口协议，以及后续的继续学习总结。">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20210712002719500.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L25hdW15,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20210704220341656.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L25hdW15,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20210712002306933.png">
+<meta property="og:image" content="https://wywtypora.oss-cn-shanghai.aliyuncs.com/image/image-20210713081243232.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/2021070422230071.png">
+<meta property="og:image" content="https://wywtypora.oss-cn-shanghai.aliyuncs.com/image/识别流程.png">
+<meta property="og:image" content="https://wywtypora.oss-cn-shanghai.aliyuncs.com/image/image-20210713080124647.png">
+<meta property="og:image" content="https://wywtypora.oss-cn-shanghai.aliyuncs.com/image/点抄流程.png">
+<meta property="og:image" content="https://wywtypora.oss-cn-shanghai.aliyuncs.com/image/从节点主动注册流程.png">
+<meta property="og:image" content="https://wywtypora.oss-cn-shanghai.aliyuncs.com/image/image-20210714073517357.png">
+<meta property="og:image" content="https://wywtypora.oss-cn-shanghai.aliyuncs.com/image/image-20210714073537138.png">
+<meta property="og:image" content="https://wywtypora.oss-cn-shanghai.aliyuncs.com/image/广播流程通信时延相关报文通信机制流程.png">
+<meta property="og:image" content="https://wywtypora.oss-cn-shanghai.aliyuncs.com/image/%E5%B8%B8%E7%94%A8%E6%8C%87%E4%BB%A4.jpg">
+<meta property="article:published_time" content="2021-07-28T15:06:12.000Z">
+<meta property="article:modified_time" content="2021-08-01T12:07:08.989Z">
+<meta property="article:author" content="naumy">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://img-blog.csdnimg.cn/20210712002719500.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L25hdW15,size_16,color_FFFFFF,t_70"><title>低压电力线宽带载波通信互联互通技术规范第4-2部分：数据链路层通信协议 | naumy's Blog</title><link ref="canonical" href="http://example.com/2021/07/28/376.2%E9%9B%86%E4%B8%AD%E5%99%A8%E6%9C%AC%E5%9C%B0%E9%80%9A%E4%BF%A1%E6%A8%A1%E5%9D%97%E6%8E%A5%E5%8F%A3%E5%8D%8F%E8%AE%AE/"><link rel="dns-prefetch" href="https://cdn.jsdelivr.net"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.12.1/css/all.min.css" type="text/css"><link rel="stylesheet" href="/css/index.css?v=2.6.2"><script>var Stun = window.Stun || {};
+var CONFIG = {
+  root: '/',
+  algolia: undefined,
+  assistSearch: undefined,
+  fontIcon: {"prompt":{"success":"fas fa-check-circle","info":"fas fa-arrow-circle-right","warning":"fas fa-exclamation-circle","error":"fas fa-times-circle"},"copyBtn":"fas fa-copy"},
+  sidebar: {"offsetTop":"20px","tocMaxDepth":6},
+  header: {"enable":true,"showOnPost":true,"scrollDownIcon":false},
+  postWidget: {"endText":true},
+  nightMode: {"enable":true},
+  back2top: {"enable":true},
+  codeblock: {"style":"default","highlight":"light","wordWrap":false},
+  reward: false,
+  fancybox: false,
+  zoomImage: {"gapAside":"20px"},
+  galleryWaterfall: undefined,
+  lazyload: false,
+  pjax: undefined,
+  externalLink: {"icon":{"enable":true,"name":"fas fa-external-link-alt"}},
+  shortcuts: undefined,
+  prompt: {"copyButton":"Copy","copySuccess":"Copy Success","copyError":"Copy Error"},
+  sourcePath: {"js":"js","css":"css","images":"images"},
+};
+
+window.CONFIG = CONFIG;</script><meta name="generator" content="Hexo 5.4.0"></head><body><div class="container" id="container"><header class="header" id="header"><div class="header-inner"><nav class="header-nav header-nav--fixed"><div class="header-nav-inner"><div class="header-nav-menubtn"><i class="fas fa-bars"></i></div><div class="header-nav-menu"><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/"><span class="header-nav-menu-item__text">Home</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/archives/"><span class="header-nav-menu-item__text">Archives</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/categories/"><span class="header-nav-menu-item__text">Categories</span></a></div></div><div class="header-nav-mode"><div class="mode"><div class="mode-track"><span class="mode-track-moon"></span><span class="mode-track-sun"></span></div><div class="mode-thumb"></div></div></div></div></nav><div class="header-banner"><div class="header-banner-info"><div class="header-banner-info__title">naumy's Blog</div><div class="header-banner-info__subtitle">write code and love life</div></div></div></div></header><main class="main" id="main"><div class="main-inner"><div class="content-wrap" id="content-wrap"><div class="content" id="content"><!-- Just used to judge whether it is an article page--><div id="is-post"></div><div class="post"><header class="post-header"><h1 class="post-title">低压电力线宽带载波通信互联互通技术规范第4-2部分：数据链路层通信协议</h1><div class="post-meta"><span class="post-meta-item post-meta-item--createtime"><span class="post-meta-item__icon"><i class="far fa-calendar-plus"></i></span><span class="post-meta-item__info">Created</span><span class="post-meta-item__value">2021-07-28</span></span><span class="post-meta-item post-meta-item--updatetime"><span class="post-meta-item__icon"><i class="far fa-calendar-check"></i></span><span class="post-meta-item__info">Updated</span><span class="post-meta-item__value">2021-08-01</span></span></div></header><div class="post-body">
+        <h2 id="学习总结"   >
+          <a href="#学习总结" class="heading-link"><i class="fas fa-link"></i></a><a href="#学习总结" class="headerlink" title="学习总结"></a>学习总结</h2>
+      <p>[TOC]</p>
+
+        <h3 id="1-术语定义和缩略语"   >
+          <a href="#1-术语定义和缩略语" class="heading-link"><i class="fas fa-link"></i></a><a href="#1-术语定义和缩略语" class="headerlink" title="1. 术语定义和缩略语"></a>1. 术语定义和缩略语</h3>
+      
+        <h4 id="1-1-符号和缩略语"   >
+          <a href="#1-1-符号和缩略语" class="heading-link"><i class="fas fa-link"></i></a><a href="#1-1-符号和缩略语" class="headerlink" title="1.1 符号和缩略语"></a>1.1 符号和缩略语</h4>
+      <figure class="highlight shell"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">BS：独立位组合（指的是一个bit或者多个bit所能代表的特殊含义）</span><br><span class="line">CS：帧校验和</span><br><span class="line">Fn：信息类标识码</span><br><span class="line">L1：用户数据长度</span><br><span class="line">AFN：应用功能码</span><br><span class="line">C：控制域</span><br><span class="line">主节点：集中器的本地通信模块（电脑pc模拟的集中器）</span><br><span class="line">信道：通信的通道，是信号传输的媒介。</span><br><span class="line">路由：路由是指分组从源到目的地时，决定端到端路径的网络范围的进程。</span><br><span class="line">台区：一个CCO所组成的网络就被称之为一个台区。</span><br><span class="line">路由模块：路由模块指的就是CCO。</span><br><span class="line">单项供电单相传输：单相供电技术是指线路上不同变电所供电的区段接触网电压相位相同，线路上无电分相环节的牵引供电方式。</span><br><span class="line">宽带和窄带的区别：频率不同所以分为宽带和窄带。</span><br></pre></td></tr></table></div></figure>
+
+        <h4 id="1-2-G3、HPLC、HPRC"   >
+          <a href="#1-2-G3、HPLC、HPRC" class="heading-link"><i class="fas fa-link"></i></a><a href="#1-2-G3、HPLC、HPRC" class="headerlink" title="1.2 G3、HPLC、HPRC"></a>1.2 G3、HPLC、HPRC</h4>
+      <figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">1. 集中器（上位机）通过376.2协议来控制CCO，CCO与STA之间通过载波线进行通信，CCO与STA之间的通信协议，国网为HPLC，通过载波线进行传输，HPRC则是通过无线的方式进行通信。</span><br><span class="line">2. G3是国际标准。</span><br><span class="line">3. 双模包括载波线通信和无线通信。</span><br></pre></td></tr></table></div></figure>
+
+        <h4 id="1-3-抄表机制"   >
+          <a href="#1-3-抄表机制" class="heading-link"><i class="fas fa-link"></i></a><a href="#1-3-抄表机制" class="headerlink" title="1.3 抄表机制"></a>1.3 抄表机制</h4>
+      <figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">1.集中器主动抄表（点钞）</span><br><span class="line">上位机与CCO进行交互，抄一个站点就要下发一条抄表报文，例如，抄100个表就要下发100条报文。受超时和地址的限制。</span><br><span class="line">2.路由抄表</span><br><span class="line">上位机发送指令，告诉CCO需要进行路由抄表了，然后CCO会根据自己的档案进行一个一个抄表，然后把抄表数据上报给上位机，从而做到上位机只发送了一次抄表指令。</span><br><span class="line">3.并发抄表</span><br><span class="line">集中器会同时发送多条报文。</span><br><span class="line">4.数据转发抄表</span><br></pre></td></tr></table></div></figure>
+
+<blockquote>
+<p>路由抄表：CCO主动            点抄：集中器主动</p>
+<p>抄表方式是由人为决定的。CCO会通过03-F10上报其所支持的抄表模式，国网通过集中器根据上传的抄表模式人为设定进行抄表。</p>
+</blockquote>
+
+        <h4 id="1-4-模块间交互流程"   >
+          <a href="#1-4-模块间交互流程" class="heading-link"><i class="fas fa-link"></i></a><a href="#1-4-模块间交互流程" class="headerlink" title="1.4 模块间交互流程"></a>1.4 模块间交互流程</h4>
+      <img   src="https://img-blog.csdnimg.cn/20210712002719500.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L25hdW15,size_16,color_FFFFFF,t_70" style="width: image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,tepx;height: t_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L25hdW15,size_16,color_FFFFFF,t_70px;"  alt="在这里插入图片描述" style="zoom:80%;" />
+
+
+        <h3 id="2-帧结构"   >
+          <a href="#2-帧结构" class="heading-link"><i class="fas fa-link"></i></a><a href="#2-帧结构" class="headerlink" title="2.帧结构"></a>2.帧结构</h3>
+      <p>![376.2集中器与本地通信模块 (1)](<span class="exturl"><a class="exturl__link"   target="_blank" rel="noopener" href="https://wywtypora.oss-cn-shanghai.aliyuncs.com/image/376.2%E9%9B%86%E4%B8%AD%E5%99%A8%E4%B8%8E%E6%9C%AC%E5%9C%B0%E9%80%9A%E4%BF%A1%E6%A8%A1%E5%9D%97" >https://wywtypora.oss-cn-shanghai.aliyuncs.com/image/376.2集中器与本地通信模块</a><span class="exturl__icon"><i class="fas fa-external-link-alt"></i></span></span> (1).jpg)</p>
+
+        <h4 id="2-1-帧格式定义"   >
+          <a href="#2-1-帧格式定义" class="heading-link"><i class="fas fa-link"></i></a><a href="#2-1-帧格式定义" class="headerlink" title="2.1 帧格式定义"></a>2.1 帧格式定义</h4>
+      <p><img   src="https://img-blog.csdnimg.cn/20210704220341656.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L25hdW15,size_16,color_FFFFFF,t_70" style="width: image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,tepx;height: t_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L25hdW15,size_16,color_FFFFFF,t_70px;"  alt="在这里插入图片描述"></p>
+
+        <h4 id="2-2-通信方式"   >
+          <a href="#2-2-通信方式" class="heading-link"><i class="fas fa-link"></i></a><a href="#2-2-通信方式" class="headerlink" title="2.2 通信方式"></a>2.2 通信方式</h4>
+      <p><font color=green><strong>集中式路由载波通信和分布式路由载波通信</strong></font></p>
+<pre><code>  集中式路由是主从路由，同时只有一方在发送载波，分布式路由不分主从，采用CSA(冲突检测重发机制)，类似于TCP上的通讯，集中式路由主要是明确指定中继路经，分布式路由可以由载波节点自动中继，分布式是集中器模块与载波表是对等网络，共同完成中继路径的优化和绑定。
+</code></pre>
+
+        <h4 id="2-3-用户数据结构"   >
+          <a href="#2-3-用户数据结构" class="heading-link"><i class="fas fa-link"></i></a><a href="#2-3-用户数据结构" class="headerlink" title="2.3 用户数据结构"></a>2.3 用户数据结构</h4>
+      
+        <h5 id="2-3-1-信息域"   >
+          <a href="#2-3-1-信息域" class="heading-link"><i class="fas fa-link"></i></a><a href="#2-3-1-信息域" class="headerlink" title="2.3.1 信息域"></a>2.3.1 信息域</h5>
+      <p>集中器 &lt;-&gt; CCO  &lt;-&gt;  STA</p>
+<blockquote>
+<p> 上行: CCO到集中器         下行: 集中器到CCO</p>
+</blockquote>
+<img src="https://img-blog.csdnimg.cn/20210712002306933.png" alt="在这里插入图片描述" style="zoom:80%;" />
+
+
+        <h5 id="2-3-2-地址域"   >
+          <a href="#2-3-2-地址域" class="heading-link"><i class="fas fa-link"></i></a><a href="#2-3-2-地址域" class="headerlink" title="2.3.2 地址域"></a>2.3.2 地址域</h5>
+      <p><img src="https://wywtypora.oss-cn-shanghai.aliyuncs.com/image/image-20210713081243232.png" alt="image-20210713081243232"></p>
+<p>a）当信息域的“通信模块标识”为0时，无地址域A。</p>
+<p>b）当信息域的“通信模块标识”为1时，主节点下行时，源地址A1是指主节点的MAC地址，</p>
+<p>中继地址A2和目的地址A3是指从节点的MAC地址;从节点上行时，源地址A1是指从节点的MAC地址，无中继地址A2，目的地址A3是指主节点的MAC地址。</p>
+<p>c）当为广播命令时，目的地址A3为广播地址999 999 999 999H。</p>
+
+        <h5 id="2-3-3-应用数据域"   >
+          <a href="#2-3-3-应用数据域" class="heading-link"><i class="fas fa-link"></i></a><a href="#2-3-3-应用数据域" class="headerlink" title="2.3.3 应用数据域"></a>2.3.3 应用数据域</h5>
+      <blockquote>
+<p> 数据单元标识由信息类标识DT组成，表示信息类型。数据单元标识为2个字节。</p>
+</blockquote>
+<img src="https://img-blog.csdnimg.cn/2021070422230071.png" alt="在这里插入图片描述" style="zoom:80%;" />
+
+
+<p>DT2采用二进制编码方式表示信息类组，DT1对位表示某一信息类组的1~8种信息类型，以此共同构成信息类标识Fn （n=1～248)。</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">信息类其实就是功能码AFN对应的FN,此处有方便的计算方式：  </span><br><span class="line">FN = FT1中1的位置 + FT2*8(FT2一般为0)  </span><br><span class="line">示例：  </span><br><span class="line">02 00∶其中FT1 = 02(十六进制)= 0000010(二进制)，其中为1的位在第2个bit位置，另外FT2 = 0,因此FN=2+0*8 = 2,也就是F2</span><br><span class="line">01 00∶其中 FT1= 01(十六进制)= 00000001(二进制)，其中为1的位在第1个bit位置，另外FT2= 0,因此FN= 1+0*8 = 1，也就是F1</span><br><span class="line">01 00∶FT1 = 01 = 0000 0001 FT2 = 0  FN = 1 + 0*8 = 1</span><br><span class="line">20 01∶FT1 = 20 = 0010 0000 FT2 = 1  FN = 6 + 1*8 = 14</span><br></pre></td></tr></table></div></figure>
+
+        <h4 id="2-4-链路传输"   >
+          <a href="#2-4-链路传输" class="heading-link"><i class="fas fa-link"></i></a><a href="#2-4-链路传输" class="headerlink" title="2.4 链路传输"></a>2.4 链路传输</h4>
+      <p><font color=bluee><strong>链路传输中的启动站和从动站</strong></font></p>
+<blockquote>
+<p>在对等通信或主从通信中，启动站表示主动发起通信需求的一方，而从动站则表示受启动站要求进行通信的一方。</p>
+</blockquote>
+
+        <h4 id="2-5-实例解析"   >
+          <a href="#2-5-实例解析" class="heading-link"><i class="fas fa-link"></i></a><a href="#2-5-实例解析" class="headerlink" title="2.5 实例解析"></a>2.5 实例解析</h4>
+      <p><font color=green><strong>示例一:CCO发送集中器报文</strong></font></p>
+<p>uart tx pkt [len(49)]</p>
+<blockquote>
+<p> 68 31 00 83 04 00 01 00 00 5c 82 70 95 06 21 00 36 12 00 04 22 02 13 01 00 02 00 02 12 68 82 70 95 06 21 00 68 91 06 33 36 34 35 33 33 4d 16 dc 16 </p>
+</blockquote>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">68      起始帧字符</span><br><span class="line">31 00   长度L </span><br><span class="line">83      控制码C  1000 0011  D7 = 1 此报文由模块发出上行报文,  D6 =0 表示此帧报文来自从动站, D5-D0 =3　通信方式为宽带</span><br><span class="line">04 00 01 00 00 5c  信息域 00000100 00000000 第一字节D2=1 表示对从节点操作 </span><br><span class="line">82 70 95 06 21 00  地址域 源地址A1</span><br><span class="line">36 12 00 04 22 02  地址域 目的地址A3</span><br><span class="line">13      功能码AFN=13H  路由数据转发</span><br><span class="line">01 00   数据单元标识  信息类DT 信息类DT由信息类元DT1= 0000 0001 信息类组DT2=0000 0000   标识F1</span><br><span class="line">02 00 02 12  数据单元</span><br><span class="line">68 82 70 95 06 21 00 68 91 06 33 36 34 35 33 33 4d 16  原始报文内容 645报文</span><br><span class="line">645报文解析：</span><br><span class="line">    68 起始帧字符</span><br><span class="line">    82 70 95 06 21 00  地址域 00 21 06 95 70 82</span><br><span class="line">    91 控制码 1001 0001   D7=1 从站发出应答帧 D6=0 从站正常应答 D5=0 无后续帧 D4-D0=10001 标识读数据  </span><br><span class="line">    06 长度L</span><br><span class="line">    33 36 34 35 数据单元标识 减去33  02 01 03 00 C相电压</span><br><span class="line">    33 33 数据项内容 2字节 格式 xxx.x 000.0V</span><br><span class="line">    4d  校验和</span><br><span class="line">    16 结束符</span><br><span class="line">dc  帧校验   是控制域和用户数据区所有字节的八位位组算术和</span><br><span class="line">16 结束字符</span><br></pre></td></tr></table></div></figure>
+
+<p><font color=green><strong>示例二:帧结构解析</strong></font></p>
+<blockquote>
+<p>68 22 00 01 00 00 00 00 00 00 14 01 00 02 10 68 03 19 37 00 00 00 68 11 04 34 34 39 38 11 16 00 60 16</p>
+</blockquote>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">68:起始字符。</span><br><span class="line">22 00:即00 22，报文长度L，报文整个的长度22H为16进制，转换成十进制为34，即报文长度为34个字节。</span><br><span class="line">01:01H=0000 0001B，0-集中器发出的下行报文，0-报文来自从动站，0001-通信方式为集中式路由载波通信（只需要看前面两个就可以，第一个是报文方向.1-路由发出的上行报文，0-集中器发出的下行报文;第二个，1-报文来自主动站，0-报文来自从动站，就是说是主动发起的命令还是回应的)。</span><br><span class="line">00 00 00 00 00 00:信息域R。</span><br><span class="line">14: 14H应用功能码，为路由数据抄读类。</span><br><span class="line">01 00:数据单元标识为:F1，路由请求抄读内容。</span><br><span class="line">02 10:02H表示可以抄读，10H:数据长度L，当标识为02AH时，L有效，数据内容为DL/T645规约的数据。</span><br><span class="line">68 03 19 37 00 00 00 68 11 04 34 34 39 38 11 16 00:此段为645规约的内容，具体分析见后。</span><br><span class="line">60:校验码。</span><br><span class="line">16:结束字符。</span><br><span class="line">中间被嵌入的645规约的内容解析如下:</span><br><span class="line">68:起始字符</span><br><span class="line">03 19 37 00 00 00:地址域A，BCD码，真实地址为00 00 00 37 19 03</span><br><span class="line"></span><br><span class="line">68:起始字符</span><br><span class="line">11:11H=0001 000IB为控制码C。0:从主站发出的命令帧，0:从主站正确应答，0:无后续帧，10001读数据</span><br></pre></td></tr></table></div></figure>
+
+
+        <h3 id="3-集中器与本地通信模块交互流程"   >
+          <a href="#3-集中器与本地通信模块交互流程" class="heading-link"><i class="fas fa-link"></i></a><a href="#3-集中器与本地通信模块交互流程" class="headerlink" title="3. 集中器与本地通信模块交互流程"></a>3. 集中器与本地通信模块交互流程</h3>
+      <blockquote>
+<p>本地通信单元可以理解为CCO，集中器上面的管脚与CCO上的管脚是一样的，使用管脚为20脚，低电平表示CCO接入，高电平为CCO未接入。</p>
+</blockquote>
+
+        <h4 id="3-1-识别流程"   >
+          <a href="#3-1-识别流程" class="heading-link"><i class="fas fa-link"></i></a><a href="#3-1-识别流程" class="headerlink" title="3.1 识别流程"></a>3.1 识别流程</h4>
+      <figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">复位路由的目的：</span><br><span class="line">清除CCO里面的数据，清数据的意思是希望CCO上电之后跟第一次插上去的效果是一样的，不要有太多的残留信息在里面，不管是档案信息还是通信信息全部清除掉，这样集中器才能够控制CCO添加档案，抄控器底座上的复位按钮，按钮按一下相当于重启，但是档案还保留着。</span><br></pre></td></tr></table></div></figure>
+
+<p>集中器通过reset管脚复位路由：<br>集中器等待CCO 上报信息，如果CCO在一分钟之内没有上报，则集中器主动发送“本地通信模块运行模式信息”查询命令（03H-F10），如果CCO的地址与集中器的地址不匹配，则设置CCO的地址，因为集中器的地址不是经常变化的。根据“本地通信模块运行模式信息”确定集中器的抄表机制。</p>
+<img src="https://wywtypora.oss-cn-shanghai.aliyuncs.com/image/识别流程.png" alt="识别流程" style="zoom: 67%;" />
+
+
+        <h4 id="3-2-档案同步流程"   >
+          <a href="#3-2-档案同步流程" class="heading-link"><i class="fas fa-link"></i></a><a href="#3-2-档案同步流程" class="headerlink" title="3.2 档案同步流程"></a>3.2 档案同步流程</h4>
+      <figure class="highlight plaintext"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">集中器下发命令给CCO，获取从节点数量、从节点信息，然后从返回的信息中与集中器的信息相比较，如果不一样，则通过删除从节点电表地址或者添加从节点电表地址，最终使模块与集中器的电表档案一致。</span><br><span class="line">档案信息：存在CCO与集中器中。</span><br></pre></td></tr></table></div></figure>
+
+<img src="https://wywtypora.oss-cn-shanghai.aliyuncs.com/image/image-20210713080124647.png" alt="image-20210713080124647" style="zoom: 67%;" />
+
+
+        <h4 id="3-3-点抄流程"   >
+          <a href="#3-3-点抄流程" class="heading-link"><i class="fas fa-link"></i></a><a href="#3-3-点抄流程" class="headerlink" title="3.3 点抄流程"></a>3.3 点抄流程</h4>
+      <figure class="highlight plaintext"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">点抄流程中，首先集中器下发暂停命令，暂停路由工作，然后集中器向CCO中下发监控从节点命令，然后集中器处理返回的应答数据帧，然后判断是否有后续的监控指令，判断标准为（监控从节点的最大超时时间等待响应，最大超时时间为90s），如果有就继续进行发送监控从节点指令，没有就结束流程。</span><br></pre></td></tr></table></div></figure>
+
+<blockquote>
+<p>点抄前为什么要暂停路由的目的：<br>1、所谓“路由”，是指把数据从一个地方传送到另一个地方的行为和动作。<br>2、为了确保点抄任务不受其它的路由交互任务所影响。<br>3、集中器与cco之间是在不断的交互的会有其它任务在执行。</p>
+</blockquote>
+<img src="https://wywtypora.oss-cn-shanghai.aliyuncs.com/image/点抄流程.png" alt="点抄流程" style="zoom:67%;" />
+
+
+        <h4 id="3-4-从节点主动注册流程"   >
+          <a href="#3-4-从节点主动注册流程" class="heading-link"><i class="fas fa-link"></i></a><a href="#3-4-从节点主动注册流程" class="headerlink" title="3.4 从节点主动注册流程"></a>3.4 从节点主动注册流程</h4>
+      <figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">首先集中器下发暂停命令，停止抄表，然后集中器下发激活从节点注册，循环获取集中器收到上报的从节点信息，如果CCO十分钟还没有上报注册信息，集中器下发“路由运行状态”命令，根据路由状态中的“工作标志”决定是否上报，或者根据CCO上报的“路由工况变动信息”，获取主动注册结束，回复确认报文，停止主动注册。</span><br></pre></td></tr></table></div></figure>
+
+<blockquote>
+<p>从节点主动注册：可以通过从节点主动注册获取CCO下的STA信息，CCO把属于自己台区的STA信息发送给集中器。集中器可以根据自己得档案信息添加STA或者让不在档案中的STA不入网。</p>
+</blockquote>
+<img src="https://wywtypora.oss-cn-shanghai.aliyuncs.com/image/从节点主动注册流程.png" alt="从节点主动注册流程" style="zoom:67%;" />
+
+
+        <h4 id="3-5-定时或周期抄表流程"   >
+          <a href="#3-5-定时或周期抄表流程" class="heading-link"><i class="fas fa-link"></i></a><a href="#3-5-定时或周期抄表流程" class="headerlink" title="3.5 定时或周期抄表流程"></a>3.5 定时或周期抄表流程</h4>
+      
+        <h5 id="3-5-1-集中器主动方式"   >
+          <a href="#3-5-1-集中器主动方式" class="heading-link"><i class="fas fa-link"></i></a><a href="#3-5-1-集中器主动方式" class="headerlink" title="3.5.1 集中器主动方式"></a>3.5.1 集中器主动方式</h5>
+      <figure class="highlight plaintext"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">首先集中器下发“暂停”命令，停止CCO主动模式抄表流程。集中器下发“监控从节点”命令，并设置下发报文的本地通信延时相关性标志，需要考虑延时的情况，需要响应路由发来的“通信延时修正通信数据”的请求，收到监控结果处理数据;循环以上操作直至抄表完成或抄表时段结束。集中器发送“恢复”命令，恢复抄表流程。</span><br></pre></td></tr></table></div></figure>
+
+<img src="https://wywtypora.oss-cn-shanghai.aliyuncs.com/image/image-20210714073517357.png" alt="image-20210714073517357" style="zoom:67%;" />
+
+
+
+
+        <h5 id="3-5-2-路由模块主动方式"   >
+          <a href="#3-5-2-路由模块主动方式" class="heading-link"><i class="fas fa-link"></i></a><a href="#3-5-2-路由模块主动方式" class="headerlink" title="3.5.2 路由模块主动方式"></a>3.5.2 路由模块主动方式</h5>
+      <figure class="highlight plaintext"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">集中器检测到抄表时段已到，执行完档案同步流程后，发送“重启”或“恢复”启动抄读流程，并等待接收数据。进行表档案的判断，检测STA的表地址是否存在于集中器中，不存在则进行档案同步。若集中器表档案中存在该表且报文为“路由请求抄读内容”命令时，集中器返回“路由请求抄读内容”，其中的抄读标志项表示了“可以抄读”、“抄读成功”及“抄读失败”等三种方案，响应报文的信道标识和电表地址要和请求报文匹配;若集中器表档案中存在该表且报文为“上报抄读数据”命令时，返回确认报文，响应报文的信道标识和上报报文匹配，并记录抄读数据。若集中器收到的报文为“请求依通信延时修正通信数据”时，集中器根据具体的通信延时进行通信数据修正，并返回通信结果，退出抄表周期后，集中器发送“暂停”暂停抄表，等待下一抄表周期。</span><br></pre></td></tr></table></div></figure>
+
+<blockquote>
+<p>通信延时：为了保证数据能够在正确的时间点能够到达目的地，所以需要设置通信延时相关。</p>
+</blockquote>
+<img src="https://wywtypora.oss-cn-shanghai.aliyuncs.com/image/image-20210714073537138.png" alt="image-20210714073537138" style="zoom: 67%;" />
+
+
+        <h4 id="3-6-广播流程中通信时延相关报文通信机制流程"   >
+          <a href="#3-6-广播流程中通信时延相关报文通信机制流程" class="heading-link"><i class="fas fa-link"></i></a><a href="#3-6-广播流程中通信时延相关报文通信机制流程" class="headerlink" title="3.6 广播流程中通信时延相关报文通信机制流程"></a>3.6 广播流程中通信时延相关报文通信机制流程</h4>
+      <blockquote>
+<p> 监控报文与通信延时之间的目的：目的是集中器希望需要知道这条报文多久到达sta，然后进行相关的时间配置。</p>
+<p> 广播流程里边的启动广播( 05-F3)含义：05-F3里边可能会包一个645的帧，这个帧可能是广播校时的帧，CCO将此帧发送Sta ,Sta根据给的时间对表进行校时，广播命令不回复。</p>
+</blockquote>
+<figure class="highlight plaintext"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">集中器存在广播任务时，通过“暂停”命令控制路由进入空闲状态，然后判断广播数据的通信延时相关性。如果广播数据和本地信道的通信延时相关（如“电表校时”的广播命令)，则首先发送“通信延时相关广播通信时长”查询命令获得当前报文在目前的本地通信环境中的具体通信时长，由此修正具体的广播数据。将修正过的广播数据通过“启动广播”命令发送给本地信道，并依据返回的确认报文中的等待完成时间进行等待。</span><br></pre></td></tr></table></div></figure>
+
+<img src="https://wywtypora.oss-cn-shanghai.aliyuncs.com/image/广播流程通信时延相关报文通信机制流程.png" alt="广播流程通信时延相关报文通信机制流程" style="zoom:67%;" />
+
+
+        <h3 id="4-常用指令"   >
+          <a href="#4-常用指令" class="heading-link"><i class="fas fa-link"></i></a><a href="#4-常用指令" class="headerlink" title="4. 常用指令"></a>4. 常用指令</h3>
+      <p><img src="https://wywtypora.oss-cn-shanghai.aliyuncs.com/image/%E5%B8%B8%E7%94%A8%E6%8C%87%E4%BB%A4.jpg" alt="常用指令"></p>
+
+        <h4 id="01H-F2：参数区初始化（恢复至出厂设置）"   >
+          <a href="#01H-F2：参数区初始化（恢复至出厂设置）" class="heading-link"><i class="fas fa-link"></i></a><a href="#01H-F2：参数区初始化（恢复至出厂设置）" class="headerlink" title="01H F2：参数区初始化（恢复至出厂设置）"></a>01H F2：参数区初始化（恢复至出厂设置）</h4>
+      <blockquote>
+<p>68 0F 00 41 00 00 04 00 00 02 01 02 00 4A 16</p>
+</blockquote>
+<div class="table-container"><table>
+<thead>
+<tr>
+<th>起始字符(68H)</th>
+<th>68</th>
+<th align="left"></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>长度域(L)</td>
+<td>0F 00</td>
+<td align="left">值=15</td>
+</tr>
+<tr>
+<td>控制域(C)</td>
+<td>41</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td>传输方向(DIR)</td>
+<td></td>
+<td align="left">下行</td>
+</tr>
+<tr>
+<td>信息域(R)</td>
+<td>00 00 04 00 00 02</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td>中继级别</td>
+<td></td>
+<td align="left">0</td>
+</tr>
+<tr>
+<td>信道标识</td>
+<td></td>
+<td align="left">未知</td>
+</tr>
+<tr>
+<td>预计应答字节数</td>
+<td></td>
+<td align="left">4</td>
+</tr>
+<tr>
+<td>通信速率</td>
+<td></td>
+<td align="left">0bps</td>
+</tr>
+<tr>
+<td>应用功能码(AFN)</td>
+<td>01</td>
+<td align="left">初始化（AFN=01H）</td>
+</tr>
+<tr>
+<td>数据单元标识(Fn)</td>
+<td>02 00</td>
+<td align="left">Fn=F2</td>
+</tr>
+<tr>
+<td>数据帧名称</td>
+<td></td>
+<td align="left">参数区初始化（恢复至出厂设置）</td>
+</tr>
+<tr>
+<td>校验和(CS)</td>
+<td>4A</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td>结束字符(16H)</td>
+<td>16</td>
+<td align="left"></td>
+</tr>
+</tbody></table></div>
+
+        <h4 id="05H-F1：设置主节点地址"   >
+          <a href="#05H-F1：设置主节点地址" class="heading-link"><i class="fas fa-link"></i></a><a href="#05H-F1：设置主节点地址" class="headerlink" title="05H F1：设置主节点地址"></a>05H F1：设置主节点地址</h4>
+      <blockquote>
+<p>68 15 00 43 00 00 00 00 00 27 05 01 00 37 51 08 21 01 00 22 16</p>
+</blockquote>
+<div class="table-container"><table>
+<thead>
+<tr>
+<th>帧结构</th>
+<th>字节报文</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>起始字符(68H)</td>
+<td>68</td>
+<td></td>
+</tr>
+<tr>
+<td>长度域(L)</td>
+<td>15 00</td>
+<td>值=21</td>
+</tr>
+<tr>
+<td>控制域(C)</td>
+<td>43</td>
+<td></td>
+</tr>
+<tr>
+<td>传输方向(DIR)</td>
+<td></td>
+<td>下行</td>
+</tr>
+<tr>
+<td>信息域(R)</td>
+<td>00 00 00 00 00 27</td>
+<td></td>
+</tr>
+<tr>
+<td>中继级别</td>
+<td></td>
+<td>0</td>
+</tr>
+<tr>
+<td>信道标识</td>
+<td></td>
+<td>未知</td>
+</tr>
+<tr>
+<td>应用功能码(AFN)</td>
+<td>05</td>
+<td>控制命令（AFN=05H）</td>
+</tr>
+<tr>
+<td>数据单元标识(Fn)</td>
+<td>01 00</td>
+<td>Fn=F1</td>
+</tr>
+<tr>
+<td>数据单元</td>
+<td>37 51 08 21 01 00</td>
+<td></td>
+</tr>
+<tr>
+<td>数据帧名称</td>
+<td></td>
+<td>设置载波主节点地址</td>
+</tr>
+<tr>
+<td>主节点地址</td>
+<td></td>
+<td>000121085137</td>
+</tr>
+<tr>
+<td>校验和(CS)</td>
+<td>22</td>
+<td></td>
+</tr>
+<tr>
+<td>结束字符(16H)</td>
+<td>16</td>
+<td></td>
+</tr>
+</tbody></table></div>
+
+        <h4 id="10H-F1：查询从节点数量"   >
+          <a href="#10H-F1：查询从节点数量" class="heading-link"><i class="fas fa-link"></i></a><a href="#10H-F1：查询从节点数量" class="headerlink" title="10H F1：查询从节点数量"></a>10H F1：查询从节点数量</h4>
+      <blockquote>
+<p>68 0F 00 41 00 00 00 00 00 59 10 01 00 AB 16</p>
+</blockquote>
+<div class="table-container"><table>
+<thead>
+<tr>
+<th>帧结构</th>
+<th>字节报文</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>起始字符(68H)</td>
+<td>68</td>
+<td></td>
+</tr>
+<tr>
+<td>长度域(L)</td>
+<td>0F 00</td>
+<td>值=15</td>
+</tr>
+<tr>
+<td>控制域(C)</td>
+<td>41</td>
+<td></td>
+</tr>
+<tr>
+<td>传输方向(DIR)</td>
+<td></td>
+<td>下行</td>
+</tr>
+<tr>
+<td>信息域(R)</td>
+<td>00 00 00 00 00 59</td>
+<td></td>
+</tr>
+<tr>
+<td>中继级别</td>
+<td></td>
+<td>0</td>
+</tr>
+<tr>
+<td>信道标识</td>
+<td></td>
+<td>未知</td>
+</tr>
+<tr>
+<td>应用功能码(AFN)</td>
+<td>10</td>
+<td>路由查询类（AFN=10H）</td>
+</tr>
+<tr>
+<td>数据单元标识(Fn)</td>
+<td>01 00</td>
+<td>Fn=F1</td>
+</tr>
+<tr>
+<td>数据帧名称</td>
+<td></td>
+<td>载波从节点数量（命令帧）</td>
+</tr>
+<tr>
+<td>校验和(CS)</td>
+<td>AB</td>
+<td></td>
+</tr>
+<tr>
+<td>结束字符(16H)</td>
+<td>16</td>
+<td></td>
+</tr>
+</tbody></table></div>
+
+        <h4 id="11H-F5：激活从节点主动注册"   >
+          <a href="#11H-F5：激活从节点主动注册" class="heading-link"><i class="fas fa-link"></i></a><a href="#11H-F5：激活从节点主动注册" class="headerlink" title="11H F5：激活从节点主动注册"></a>11H F5：激活从节点主动注册</h4>
+      <blockquote>
+<p>18 19 00 03 00 00 00 00 00 00 11 10 00 05 45 14 06 08 17 1E 00 03 01 C9 16</p>
+</blockquote>
+<div class="table-container"><table>
+<thead>
+<tr>
+<th>帧结构</th>
+<th>字节报文</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>起始字符(68H)</td>
+<td>68</td>
+<td></td>
+</tr>
+<tr>
+<td>长度域(L)</td>
+<td>19 00</td>
+<td>值=25</td>
+</tr>
+<tr>
+<td>控制域(C)</td>
+<td>03</td>
+<td></td>
+</tr>
+<tr>
+<td>传输方向(DIR)</td>
+<td></td>
+<td>下行</td>
+</tr>
+<tr>
+<td>信息域(R)</td>
+<td>00 00 00 00 00 00</td>
+<td></td>
+</tr>
+<tr>
+<td>中继级别</td>
+<td></td>
+<td>0</td>
+</tr>
+<tr>
+<td>信道标识</td>
+<td></td>
+<td>未知</td>
+</tr>
+<tr>
+<td>预计应答字节数</td>
+<td></td>
+<td>0</td>
+</tr>
+<tr>
+<td>应用功能码(AFN)</td>
+<td>11</td>
+<td>路由设置类（AFN=11H）</td>
+</tr>
+<tr>
+<td>数据单元标识(Fn)</td>
+<td>10 00</td>
+<td>Fn=F5</td>
+</tr>
+<tr>
+<td>数据单元</td>
+<td>05 45 14 06 08 17 1E 00 03 01</td>
+<td></td>
+</tr>
+<tr>
+<td>数据帧名称</td>
+<td></td>
+<td>激活载波从节点主动注册</td>
+</tr>
+<tr>
+<td>持续时间</td>
+<td></td>
+<td>30min</td>
+</tr>
+<tr>
+<td>校验和(CS)</td>
+<td>C9</td>
+<td></td>
+</tr>
+<tr>
+<td>结束字符(16H)</td>
+<td>16</td>
+<td></td>
+</tr>
+</tbody></table></div>
+
+        <h4 id="12H-F3：恢复路由"   >
+          <a href="#12H-F3：恢复路由" class="heading-link"><i class="fas fa-link"></i></a><a href="#12H-F3：恢复路由" class="headerlink" title="12H F3：恢复路由"></a>12H F3：恢复路由</h4>
+      <blockquote>
+<p>68 0F 00 41 00 00 04 00 00 D7 12 04 00 62 16</p>
+</blockquote>
+<div class="table-container"><table>
+<thead>
+<tr>
+<th align="left">帧结构</th>
+<th align="left">字节报文</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">起始字符(68H)</td>
+<td align="left">68</td>
+<td></td>
+</tr>
+<tr>
+<td align="left">长度域(L)</td>
+<td align="left">0F 00</td>
+<td>值=15</td>
+</tr>
+<tr>
+<td align="left">控制域(C)</td>
+<td align="left">41</td>
+<td></td>
+</tr>
+<tr>
+<td align="left">传输方向(DIR)</td>
+<td align="left"></td>
+<td>下行</td>
+</tr>
+<tr>
+<td align="left">信息域(R)</td>
+<td align="left">00 00 04 00 00 07</td>
+<td></td>
+</tr>
+<tr>
+<td align="left">中继级别</td>
+<td align="left"></td>
+<td>0</td>
+</tr>
+<tr>
+<td align="left">信道标识</td>
+<td align="left"></td>
+<td>未知</td>
+</tr>
+<tr>
+<td align="left">预计应答字节数</td>
+<td align="left"></td>
+<td>4</td>
+</tr>
+<tr>
+<td align="left">通信速率</td>
+<td align="left"></td>
+<td>0bps</td>
+</tr>
+<tr>
+<td align="left">应用功能码(AFN)</td>
+<td align="left">12</td>
+<td>路由控制类（AFN=12H）</td>
+</tr>
+<tr>
+<td align="left">数据单元标识(Fn)</td>
+<td align="left">04 00</td>
+<td>Fn=F3</td>
+</tr>
+<tr>
+<td align="left">数据帧名称</td>
+<td align="left"></td>
+<td>恢复</td>
+</tr>
+<tr>
+<td align="left">校验和(CS)</td>
+<td align="left">62</td>
+<td></td>
+</tr>
+<tr>
+<td align="left">结束字符(16H)</td>
+<td align="left">16</td>
+<td></td>
+</tr>
+</tbody></table></div>
+</div><footer class="post-footer"><div class="post-ending ending"><div class="ending__text">------ END ------</div></div><div class="post-copyright copyright"><div class="copyright-author"><span class="copyright-author__name">Author: </span><span class="copyright-author__value"><a href="http://example.com">naumy</a></span></div><div class="copyright-link"><span class="copyright-link__name">Link: </span><span class="copyright-link__value"><a href="http://example.com/2021/07/28/376.2%E9%9B%86%E4%B8%AD%E5%99%A8%E6%9C%AC%E5%9C%B0%E9%80%9A%E4%BF%A1%E6%A8%A1%E5%9D%97%E6%8E%A5%E5%8F%A3%E5%8D%8F%E8%AE%AE/">http://example.com/2021/07/28/376.2%E9%9B%86%E4%B8%AD%E5%99%A8%E6%9C%AC%E5%9C%B0%E9%80%9A%E4%BF%A1%E6%A8%A1%E5%9D%97%E6%8E%A5%E5%8F%A3%E5%8D%8F%E8%AE%AE/</a></span></div><div class="copyright-notice"><span class="copyright-notice__name">Copyright: </span><span class="copyright-notice__value">All articles in this blog are licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.en" rel="external nofollow" target="_blank">BY-NC-SA</a> unless stating additionally</span></div></div><nav class="post-paginator paginator"><div class="paginator-prev"><a class="paginator-prev__link" href="/2021/07/28/%E4%BD%8E%E5%8E%8B%E7%94%B5%E5%8A%9B%E7%BA%BF%E5%AE%BD%E5%B8%A6%E8%BD%BD%E6%B3%A2%E9%80%9A%E4%BF%A1%E4%BA%92%E8%81%94%E4%BA%92%E9%80%9A%E6%8A%80%E6%9C%AF%E8%A7%84%E8%8C%83%E7%AC%AC4-2%E9%83%A8%E5%88%86%EF%BC%9A%E6%95%B0%E6%8D%AE%E9%93%BE%E8%B7%AF%E5%B1%82%E9%80%9A%E4%BF%A1%E5%8D%8F%E8%AE%AE%20-%20%E5%89%AF%E6%9C%AC/"><span class="paginator-prev__icon"><i class="fas fa-angle-left"></i></span><span class="paginator-prev__text">低压电力线宽带载波通信互联互通技术规范第4-2部分：数据链路层通信协议</span></a></div><div class="paginator-next"><a class="paginator-next__link" href="/2021/07/28/hello-world/"><span class="paginator-prev__text">Hello World</span><span class="paginator-next__icon"><i class="fas fa-angle-right"></i></span></a></div></nav></footer></div></div></div><div class="sidebar-wrap" id="sidebar-wrap"><aside class="sidebar" id="sidebar"><div class="sidebar-nav"><span class="sidebar-nav-toc current">Catalog</span><span class="sidebar-nav-ov">Overview</span></div><section class="sidebar-toc"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AD%A6%E4%B9%A0%E6%80%BB%E7%BB%93"><span class="toc-number">1.</span> <span class="toc-text">
+          学习总结</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E6%9C%AF%E8%AF%AD%E5%AE%9A%E4%B9%89%E5%92%8C%E7%BC%A9%E7%95%A5%E8%AF%AD"><span class="toc-number">1.1.</span> <span class="toc-text">
+          1. 术语定义和缩略语</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-1-%E7%AC%A6%E5%8F%B7%E5%92%8C%E7%BC%A9%E7%95%A5%E8%AF%AD"><span class="toc-number">1.1.1.</span> <span class="toc-text">
+          1.1 符号和缩略语</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-2-G3%E3%80%81HPLC%E3%80%81HPRC"><span class="toc-number">1.1.2.</span> <span class="toc-text">
+          1.2 G3、HPLC、HPRC</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-3-%E6%8A%84%E8%A1%A8%E6%9C%BA%E5%88%B6"><span class="toc-number">1.1.3.</span> <span class="toc-text">
+          1.3 抄表机制</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-4-%E6%A8%A1%E5%9D%97%E9%97%B4%E4%BA%A4%E4%BA%92%E6%B5%81%E7%A8%8B"><span class="toc-number">1.1.4.</span> <span class="toc-text">
+          1.4 模块间交互流程</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E5%B8%A7%E7%BB%93%E6%9E%84"><span class="toc-number">1.2.</span> <span class="toc-text">
+          2.帧结构</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#2-1-%E5%B8%A7%E6%A0%BC%E5%BC%8F%E5%AE%9A%E4%B9%89"><span class="toc-number">1.2.1.</span> <span class="toc-text">
+          2.1 帧格式定义</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-2-%E9%80%9A%E4%BF%A1%E6%96%B9%E5%BC%8F"><span class="toc-number">1.2.2.</span> <span class="toc-text">
+          2.2 通信方式</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-3-%E7%94%A8%E6%88%B7%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84"><span class="toc-number">1.2.3.</span> <span class="toc-text">
+          2.3 用户数据结构</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#2-3-1-%E4%BF%A1%E6%81%AF%E5%9F%9F"><span class="toc-number">1.2.3.1.</span> <span class="toc-text">
+          2.3.1 信息域</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#2-3-2-%E5%9C%B0%E5%9D%80%E5%9F%9F"><span class="toc-number">1.2.3.2.</span> <span class="toc-text">
+          2.3.2 地址域</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#2-3-3-%E5%BA%94%E7%94%A8%E6%95%B0%E6%8D%AE%E5%9F%9F"><span class="toc-number">1.2.3.3.</span> <span class="toc-text">
+          2.3.3 应用数据域</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-4-%E9%93%BE%E8%B7%AF%E4%BC%A0%E8%BE%93"><span class="toc-number">1.2.4.</span> <span class="toc-text">
+          2.4 链路传输</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-5-%E5%AE%9E%E4%BE%8B%E8%A7%A3%E6%9E%90"><span class="toc-number">1.2.5.</span> <span class="toc-text">
+          2.5 实例解析</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-%E9%9B%86%E4%B8%AD%E5%99%A8%E4%B8%8E%E6%9C%AC%E5%9C%B0%E9%80%9A%E4%BF%A1%E6%A8%A1%E5%9D%97%E4%BA%A4%E4%BA%92%E6%B5%81%E7%A8%8B"><span class="toc-number">1.3.</span> <span class="toc-text">
+          3. 集中器与本地通信模块交互流程</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#3-1-%E8%AF%86%E5%88%AB%E6%B5%81%E7%A8%8B"><span class="toc-number">1.3.1.</span> <span class="toc-text">
+          3.1 识别流程</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-2-%E6%A1%A3%E6%A1%88%E5%90%8C%E6%AD%A5%E6%B5%81%E7%A8%8B"><span class="toc-number">1.3.2.</span> <span class="toc-text">
+          3.2 档案同步流程</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-3-%E7%82%B9%E6%8A%84%E6%B5%81%E7%A8%8B"><span class="toc-number">1.3.3.</span> <span class="toc-text">
+          3.3 点抄流程</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-4-%E4%BB%8E%E8%8A%82%E7%82%B9%E4%B8%BB%E5%8A%A8%E6%B3%A8%E5%86%8C%E6%B5%81%E7%A8%8B"><span class="toc-number">1.3.4.</span> <span class="toc-text">
+          3.4 从节点主动注册流程</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-5-%E5%AE%9A%E6%97%B6%E6%88%96%E5%91%A8%E6%9C%9F%E6%8A%84%E8%A1%A8%E6%B5%81%E7%A8%8B"><span class="toc-number">1.3.5.</span> <span class="toc-text">
+          3.5 定时或周期抄表流程</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#3-5-1-%E9%9B%86%E4%B8%AD%E5%99%A8%E4%B8%BB%E5%8A%A8%E6%96%B9%E5%BC%8F"><span class="toc-number">1.3.5.1.</span> <span class="toc-text">
+          3.5.1 集中器主动方式</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#3-5-2-%E8%B7%AF%E7%94%B1%E6%A8%A1%E5%9D%97%E4%B8%BB%E5%8A%A8%E6%96%B9%E5%BC%8F"><span class="toc-number">1.3.5.2.</span> <span class="toc-text">
+          3.5.2 路由模块主动方式</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-6-%E5%B9%BF%E6%92%AD%E6%B5%81%E7%A8%8B%E4%B8%AD%E9%80%9A%E4%BF%A1%E6%97%B6%E5%BB%B6%E7%9B%B8%E5%85%B3%E6%8A%A5%E6%96%87%E9%80%9A%E4%BF%A1%E6%9C%BA%E5%88%B6%E6%B5%81%E7%A8%8B"><span class="toc-number">1.3.6.</span> <span class="toc-text">
+          3.6 广播流程中通信时延相关报文通信机制流程</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-%E5%B8%B8%E7%94%A8%E6%8C%87%E4%BB%A4"><span class="toc-number">1.4.</span> <span class="toc-text">
+          4. 常用指令</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#01H-F2%EF%BC%9A%E5%8F%82%E6%95%B0%E5%8C%BA%E5%88%9D%E5%A7%8B%E5%8C%96%EF%BC%88%E6%81%A2%E5%A4%8D%E8%87%B3%E5%87%BA%E5%8E%82%E8%AE%BE%E7%BD%AE%EF%BC%89"><span class="toc-number">1.4.1.</span> <span class="toc-text">
+          01H F2：参数区初始化（恢复至出厂设置）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#05H-F1%EF%BC%9A%E8%AE%BE%E7%BD%AE%E4%B8%BB%E8%8A%82%E7%82%B9%E5%9C%B0%E5%9D%80"><span class="toc-number">1.4.2.</span> <span class="toc-text">
+          05H F1：设置主节点地址</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#10H-F1%EF%BC%9A%E6%9F%A5%E8%AF%A2%E4%BB%8E%E8%8A%82%E7%82%B9%E6%95%B0%E9%87%8F"><span class="toc-number">1.4.3.</span> <span class="toc-text">
+          10H F1：查询从节点数量</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#11H-F5%EF%BC%9A%E6%BF%80%E6%B4%BB%E4%BB%8E%E8%8A%82%E7%82%B9%E4%B8%BB%E5%8A%A8%E6%B3%A8%E5%86%8C"><span class="toc-number">1.4.4.</span> <span class="toc-text">
+          11H F5：激活从节点主动注册</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#12H-F3%EF%BC%9A%E6%81%A2%E5%A4%8D%E8%B7%AF%E7%94%B1"><span class="toc-number">1.4.5.</span> <span class="toc-text">
+          12H F3：恢复路由</span></a></li></ol></li></ol></li></ol></section><!-- ov = overview--><section class="sidebar-ov hide"><div class="sidebar-ov-author"><div class="sidebar-ov-author__avatar"><img class="sidebar-ov-author__avatar_img" src="https://wywtypora.oss-cn-shanghai.aliyuncs.com/image/vactor.jpg" alt="avatar"></div><p class="sidebar-ov-author__text">每天进步一点点，慢一点才能更快。</p></div><div class="sidebar-ov-social"><a class="sidebar-ov-social-item" href="https://github.com/naumy-code" target="_blank" rel="noopener" data-popover="Github" data-popover-pos="up"><span class="sidebar-ov-social-item__icon"><i class="fab fa-github"></i></span></a><a class="sidebar-ov-social-item" href="https://blog.csdn.net/naumy" target="_blank" rel="noopener" data-popover="CSDN" data-popover-pos="up"><span class="sidebar-ov-social-item__icon"><i class="fab CSDN"></i></span></a><a class="sidebar-ov-social-item" href="https://twitter.com/" target="_blank" rel="noopener" data-popover="Twitter" data-popover-pos="up"><span class="sidebar-ov-social-item__icon"><i class="fab fa-twitter"></i></span></a><a class="sidebar-ov-social-item" href="https://youtube.com/" target="_blank" rel="noopener" data-popover="Youtube" data-popover-pos="up"><span class="sidebar-ov-social-item__icon"><i class="fab fa-youtube"></i></span></a></div><div class="sidebar-ov-state"><a class="sidebar-ov-state-item sidebar-ov-state-item--posts" href="/archives/"><div class="sidebar-ov-state-item__count">3</div><div class="sidebar-ov-state-item__name">Archives</div></a><a class="sidebar-ov-state-item sidebar-ov-state-item--categories" href="/categories/"><div class="sidebar-ov-state-item__count">0</div><div class="sidebar-ov-state-item__name">Categories</div></a></div><div class="sidebar-ov-cc"><a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.en" target="_blank" rel="noopener" data-popover="Creative Commons" data-popover-pos="up"><img src="/images/cc-by-nc-sa.svg"></a></div></section><div class="sidebar-reading"><div class="sidebar-reading-info"><span class="sidebar-reading-info__text">You have read </span><span class="sidebar-reading-info__num">0</span><span class="sidebar-reading-info__perc">%</span></div><div class="sidebar-reading-line"></div></div></aside></div><div class="clearfix"></div></div></main><footer class="footer" id="footer"><div class="footer-inner"><div><span>Copyright © 2021.07.31~Thu Jun 07 10007 08:00:00 GMT+0800 (中国标准时间)</span><span class="footer__icon"><i class="fas fa-heart"></i></span><span>naumy</span></div></div></footer><div class="loading-bar" id="loading-bar"><div class="loading-bar__progress"></div></div><div class="back2top" id="back2top"><span class="back2top__icon"><i class="fas fa-rocket"></i></span></div></div><script src="https://cdn.jsdelivr.net/npm/jquery@v3.4.1/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-animate@1.5.2/velocity.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-animate@1.5.2/velocity.ui.min.js"></script><script src="/js/utils.js?v=2.6.2"></script><script src="/js/stun-boot.js?v=2.6.2"></script><script src="/js/scroll.js?v=2.6.2"></script><script src="/js/header.js?v=2.6.2"></script><script src="/js/sidebar.js?v=2.6.2"></script></body></html>
